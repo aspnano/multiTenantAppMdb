@@ -7,6 +7,7 @@ namespace multiTenantApp.Services
     {
         private readonly TenantDbContext _context;
         public string? TenantId { get; set; }
+        public string? ConnectionString { get; set; }
 
 
         public CurrentTenantService(TenantDbContext context)
@@ -21,6 +22,7 @@ namespace multiTenantApp.Services
             if (tenantInfo != null)
             {
                 TenantId = tenant;
+                ConnectionString = tenantInfo.ConnectionString; // optional connection string per tenant (can be null to use default database)
                 return true;
             }
             else

@@ -7,23 +7,37 @@ namespace multiTenantApp.Models
     {
         private readonly ICurrentTenantService _currentTenantService;
         public string CurrentTenantId { get; set; }
+        public string CurrentTenantConnectionString { get; set; }
+
 
         // Constructor 
         public ApplicationDbContext(ICurrentTenantService currentTenantService, DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             _currentTenantService = currentTenantService;
             CurrentTenantId = _currentTenantService.TenantId;
+            CurrentTenantConnectionString = _currentTenantService.ConnectionString;
+
         }
 
-        // DbSets -- create for all entity types to be managed with EF
+        // Application DbSets -- create for entity types to be applied to all databases
         public DbSet<Product> Products { get; set; }
-        public DbSet<Tenant> Tenants { get; set; }
 
-        // On Model Creating - multitenancy query filters 
+        // On Model Creating - multitenancy query filter, fires once on app start
         protected override void OnModelCreating(ModelBuilder builder)
         {         
             builder.Entity<Product>().HasQueryFilter(a => a.TenantId == CurrentTenantId); 
         }
+
+        // On Configuring -- dynamic connection string, fires on every request
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            string tenantConnectionString = CurrentTenantConnectionString;
+            if (!string.IsNullOrEmpty(tenantConnectionString)) // use tenant db if one is specified
+            {
+                _ = optionsBuilder.UseSqlServer(tenantConnectionString);
+            }
+        }
+
 
         // On Save Changes - write tenant Id to table
         public override int SaveChanges()
