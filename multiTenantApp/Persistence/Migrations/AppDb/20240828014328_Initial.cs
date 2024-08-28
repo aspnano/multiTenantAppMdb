@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace multiTenantApp.Migrations.AppDb
+namespace multiTenantApp.Persistence.Migrations.AppDb
 {
     /// <inheritdoc />
-    public partial class AppInitial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

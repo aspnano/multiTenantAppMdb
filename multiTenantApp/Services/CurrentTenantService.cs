@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using multiTenantApp.Models;
+using multiTenantApp.Persistence.Contexts;
 
 namespace multiTenantApp.Services
 {

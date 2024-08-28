@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using multiTenantApp.Models;
+using multiTenantApp.Persistence.Contexts;
 using multiTenantApp.Services.TenantService.DTOs;
 
 namespace multiTenantApp.Services.TenantService
@@ -54,8 +55,7 @@ namespace multiTenantApp.Services.TenantService
             {
                 Id = request.Id,
                 Name = request.Name,
-                ConnectionString = newConnectionString,
-                SubscriptionLevel = "Basic"
+                ConnectionString = newConnectionString
             };
 
             _context.Add(tenant);

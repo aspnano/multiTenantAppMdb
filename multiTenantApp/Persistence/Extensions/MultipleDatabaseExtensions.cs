@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using multiTenantApp.Models;
+using multiTenantApp.Persistence.Contexts;
 
-namespace multiTenantApp.Extensions
+namespace multiTenantApp.Persistence.Extensions
 {
     public static class MultipleDatabaseExtensions
     {
@@ -25,7 +26,7 @@ namespace multiTenantApp.Extensions
 
             string defaultConnectionString = configuration.GetConnectionString("DefaultConnection"); // read default connection string from appsettings.json
 
-            foreach (Tenant tenant in tenantsInDb) 
+            foreach (Tenant tenant in tenantsInDb)
             {
                 string connectionString = string.IsNullOrEmpty(tenant.ConnectionString) ? defaultConnectionString : tenant.ConnectionString;
 

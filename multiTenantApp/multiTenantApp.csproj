@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Folder Include="Persistence\Migrations\" />
+    <Folder Include="Persistence\Migrations\AppDb\" />
+    <Folder Include="Persistence\Migrations\TenantDb\" />
   </ItemGroup>
 
 </Project>

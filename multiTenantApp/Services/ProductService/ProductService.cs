@@ -1,4 +1,5 @@
 ﻿using multiTenantApp.Models;
+using multiTenantApp.Persistence.Contexts;
 using multiTenantApp.Services.ProductService.DTOs;
 
 namespace multiTenantApp.Services.ProductService
@@ -31,7 +32,6 @@ namespace multiTenantApp.Services.ProductService
         {
             var product = new Product();
             product.Name = request.Name;
-            product.Supplier = request.Supplier;
 
             _context.Add(product);
             _context.SaveChanges();

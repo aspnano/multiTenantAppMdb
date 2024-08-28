@@ -1,8 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using multiTenantApp.Models;
 using multiTenantApp.Services;
 
-namespace multiTenantApp.Models
+namespace multiTenantApp.Persistence.Contexts
 {
+    // in a multi-database scenerio, this context manages tables that are generated in every database
+
+    //---------------------------------- CLI COMMANDS --------------------------------------------------
+
+    // when scaffolding database migrations, you must specify which context (ApplicationDbContext), -o is the output directory, use the following command:
+
+    // add-migration -Context ApplicationDbContext -o Persistence/Migrations/AppDb MigrationName
+    // update-database -Context ApplicationDbContext
+
+    //--------------------------------------------------------------------------------------------------
+
     public class ApplicationDbContext : DbContext
     {
         private readonly ICurrentTenantService _currentTenantService;
@@ -24,8 +36,8 @@ namespace multiTenantApp.Models
 
         // On Model Creating - multitenancy query filter, fires once on app start
         protected override void OnModelCreating(ModelBuilder builder)
-        {         
-            builder.Entity<Product>().HasQueryFilter(a => a.TenantId == CurrentTenantId); 
+        {
+            builder.Entity<Product>().HasQueryFilter(a => a.TenantId == CurrentTenantId);
         }
 
         // On Configuring -- dynamic connection string, fires on every request
@@ -41,14 +53,14 @@ namespace multiTenantApp.Models
 
         // On Save Changes - write tenant Id to table
         public override int SaveChanges()
-        {        
-            foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>().ToList()) 
+        {
+            foreach (var entry in ChangeTracker.Entries<IMustHaveTenant>().ToList())
             {
                 switch (entry.State)
                 {
                     case EntityState.Added:
                     case EntityState.Modified:
-                        entry.Entity.TenantId = CurrentTenantId; 
+                        entry.Entity.TenantId = CurrentTenantId;
                         break;
                 }
             }

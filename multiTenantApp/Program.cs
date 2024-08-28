@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using multiTenantApp.Extensions;
 using multiTenantApp.Middleware;
-using multiTenantApp.Models;
+using multiTenantApp.Persistence.Contexts;
+using multiTenantApp.Persistence.Extensions;
 using multiTenantApp.Services;
 using multiTenantApp.Services.ProductService;
 using multiTenantApp.Services.TenantService;
 
-// NOTE: In this simple example app there is no seed method, so be sure to create a tenant before trying to create a product (use the create tenant endpoint)
+// NOTE: In this simple example app there is no seed method,
+// so be sure to create a tenant before trying to create a product (use the create tenant endpoint)
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlSer
 builder.Services.AddDbContext<TenantDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
 
-// Product CRUD service with transient lifetime
+// CRUD services with transient lifetime
 builder.Services.AddTransient<ITenantService, TenantService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 

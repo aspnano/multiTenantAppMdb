@@ -2,20 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using multiTenantApp.Models;
+using multiTenantApp.Persistence.Contexts;
 
 #nullable disable
 
-namespace multiTenantApp.Migrations.TenantDb
+namespace multiTenantApp.Persistence.Migrations.TenantDb
 {
     [DbContext(typeof(TenantDbContext))]
-    [Migration("20230913202123_TenantInitial")]
-    partial class TenantInitial
+    partial class TenantDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
