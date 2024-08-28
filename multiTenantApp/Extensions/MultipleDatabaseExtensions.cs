@@ -25,7 +25,7 @@ namespace multiTenantApp.Extensions
 
             string defaultConnectionString = configuration.GetConnectionString("DefaultConnection"); // read default connection string from appsettings.json
 
-            foreach (Tenant tenant in tenantsInDb) // loop through all tenants, apply migrations on applicationDbContext
+            foreach (Tenant tenant in tenantsInDb) 
             {
                 string connectionString = string.IsNullOrEmpty(tenant.ConnectionString) ? defaultConnectionString : tenant.ConnectionString;
 

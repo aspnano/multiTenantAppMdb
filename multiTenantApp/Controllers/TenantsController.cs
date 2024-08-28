@@ -15,8 +15,6 @@ namespace multiTenantApp.Controllers
             _tenantService = tenantService;
         }
 
-        public ITenantService TenantService { get; }
-
         // Create a new tenant
         [HttpPost]
         public IActionResult Post(CreateTenantRequest request)

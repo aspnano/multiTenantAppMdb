@@ -55,6 +55,7 @@ namespace multiTenantApp.Services.TenantService
                 Id = request.Id,
                 Name = request.Name,
                 ConnectionString = newConnectionString,
+                SubscriptionLevel = "Basic"
             };
 
             _context.Add(tenant);
