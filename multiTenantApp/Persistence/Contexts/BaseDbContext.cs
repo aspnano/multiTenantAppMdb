@@ -3,6 +3,11 @@ using multiTenantApp.Models;
 
 namespace multiTenantApp.Persistence.Contexts
 {
+
+    // NOTE: this was renamed from tenantDbContext in the video to make things clearer
+
+
+
     // in a multi-database scenerio, this context manages tables that are generated in only the main database
 
     //---------------------------------- CLI COMMANDS --------------------------------------------------
@@ -15,7 +20,7 @@ namespace multiTenantApp.Persistence.Contexts
 
     //--------------------------------------------------------------------------------------------------
 
-    public class BaseDbContext : DbContext
+    public class BaseDbContext : DbContext 
     {
         public BaseDbContext(DbContextOptions<BaseDbContext> options)
         : base(options)

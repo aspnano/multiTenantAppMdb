@@ -19,6 +19,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 
 // adding a database service with configuration -- connection string read from appsettings.json
+// NOTE: baseDbContext was renamed from tenantDbContext in the video to make things clearer
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
