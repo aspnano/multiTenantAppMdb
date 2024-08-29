@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using multiTenantApp.Models;
 using multiTenantApp.Persistence.Contexts;
 using multiTenantApp.Services.TenantService.DTOs;
@@ -22,21 +23,30 @@ namespace multiTenantApp.Services.TenantService
         public Tenant CreateTenant(CreateTenantRequest request)
         {
 
-            string newConnectionString = null;
-            if (request.Isolated == true)
-            {
-                // generate a connection string for new tenant database
-                string dbName = "multiTenantAppDb-" + request.Id;
-                string defaultConnectionString = _configuration.GetConnectionString("DefaultConnection");
-                newConnectionString = defaultConnectionString.Replace("multiTenantAppDb", dbName);
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            SqlConnectionStringBuilder builder = new(connectionString);
+            string mainDatabaseName = builder.InitialCatalog; // retrieve the database name
+            string tenantDbName = mainDatabaseName + "-" + request.Id;
+            builder.InitialCatalog = tenantDbName; // set new database name
+            string modifiedConnectionString = builder.ConnectionString; // create new connection string
 
-                // create a new tenant database and bring current with any pending migrations from ApplicationDbContext
-                try
+            Tenant tenant = new() // create a new tenant entity
+            {
+                Id = request.Id,
+                Name = request.Name,
+                ConnectionString = request.Isolated ? modifiedConnectionString : null,
+            };
+
+            
+            try
+            {
+                if (request.Isolated == true)
                 {
+                    // create a new tenant database and bring current with any pending migrations from ApplicationDbContext
                     using IServiceScope scopeTenant = _serviceProvider.CreateScope();
                     ApplicationDbContext dbContext = scopeTenant.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    dbContext.Database.SetConnectionString(newConnectionString);
-                    if (dbContext.Database.GetPendingMigrations().Any())
+                    dbContext.Database.SetConnectionString(modifiedConnectionString);
+                    if (dbContext.Database.GetPendingMigrations().Any()) 
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine($"Applying ApplicationDB Migrations for New '{request.Id}' tenant.");
@@ -44,22 +54,15 @@ namespace multiTenantApp.Services.TenantService
                         dbContext.Database.Migrate();
                     }
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+
+                // apply changes to base db context
+                _baseDbContext.Add(tenant); // save tenant info
+                _baseDbContext.SaveChanges();
             }
-
-
-            Tenant tenant = new() // create a new tenant entity
+            catch (Exception ex)
             {
-                Id = request.Id,
-                Name = request.Name,
-                ConnectionString = newConnectionString
-            };
-
-            _baseDbContext.Add(tenant);
-            _baseDbContext.SaveChanges();
+                throw new Exception(ex.Message);
+            }
 
             return tenant;
         }
