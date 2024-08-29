@@ -5,12 +5,12 @@ namespace multiTenantApp.Services
 {
     public class CurrentTenantService : ICurrentTenantService
     {
-        private readonly TenantDbContext _context;
+        private readonly BaseDbContext _context;
         public string? TenantId { get; set; }
         public string? ConnectionString { get; set; }
 
 
-        public CurrentTenantService(TenantDbContext context)
+        public CurrentTenantService(BaseDbContext context)
         {
             _context = context;
 

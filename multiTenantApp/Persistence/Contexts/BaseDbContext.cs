@@ -7,16 +7,17 @@ namespace multiTenantApp.Persistence.Contexts
 
     //---------------------------------- CLI COMMANDS --------------------------------------------------
 
-    // when scaffolding database migrations, you must specify which context (TenantDbContext), -o is the output directory, use the following command:
+    // when scaffolding database migrations, you must specify which context (BaseDbContext), -o is the output directory, use the following command:
 
-    // add-migration -Context TenantDbContext -o Persistence/Migrations/TenantDb MigrationName
-    // update-database -Context TenantDbContext
+    // add-migration -Context BaseDbContext -o Persistence/Migrations/BaseDb MigrationName
+    // update-database -Context BaseDbContext
+
 
     //--------------------------------------------------------------------------------------------------
 
-    public class TenantDbContext : DbContext
+    public class BaseDbContext : DbContext
     {
-        public TenantDbContext(DbContextOptions<TenantDbContext> options)
+        public BaseDbContext(DbContextOptions<BaseDbContext> options)
         : base(options)
         {
         }

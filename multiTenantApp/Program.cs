@@ -20,7 +20,7 @@ builder.Services.AddScoped<ICurrentTenantService, CurrentTenantService>();
 
 // adding a database service with configuration -- connection string read from appsettings.json
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<TenantDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddAndMigrateTenantDatabases(builder.Configuration);
 
 // CRUD services with transient lifetime

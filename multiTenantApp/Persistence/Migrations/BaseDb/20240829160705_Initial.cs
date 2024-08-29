@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace multiTenantApp.Persistence.Migrations.TenantDb
+namespace multiTenantApp.Persistence.Migrations.BaseDb
 {
     /// <inheritdoc />
     public partial class Initial : Migration

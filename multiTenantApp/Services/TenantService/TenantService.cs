@@ -8,13 +8,13 @@ namespace multiTenantApp.Services.TenantService
     public class TenantService : ITenantService
     {
 
-        private readonly TenantDbContext _context; // database context
+        private readonly BaseDbContext _baseDbContext; // database context
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
 
-        public TenantService(TenantDbContext context, IConfiguration configuration, IServiceProvider serviceProvider)
+        public TenantService(BaseDbContext baseDbContext, IConfiguration configuration, IServiceProvider serviceProvider)
         {
-            _context = context;
+            _baseDbContext = baseDbContext;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
         }
@@ -58,8 +58,8 @@ namespace multiTenantApp.Services.TenantService
                 ConnectionString = newConnectionString
             };
 
-            _context.Add(tenant);
-            _context.SaveChanges();
+            _baseDbContext.Add(tenant);
+            _baseDbContext.SaveChanges();
 
             return tenant;
         }

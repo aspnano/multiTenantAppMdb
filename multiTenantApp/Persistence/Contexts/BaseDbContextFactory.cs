@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace multiTenantApp.Persistence.Contexts
 {
-    public class TenantDbContextFactory : IDesignTimeDbContextFactory<TenantDbContext>
+    public class BaseDbContextFactory : IDesignTimeDbContextFactory<BaseDbContext>
     {
-        public TenantDbContext CreateDbContext(string[] args) // neccessary for EF migration designer to run on this context
+        public BaseDbContext CreateDbContext(string[] args) // neccessary for EF migration designer to run on this context
         {
 
             // Build the configuration by reading from the appsettings.json file (requires Microsoft.Extensions.Configuration.Json Nuget Package)
@@ -18,9 +18,9 @@ namespace multiTenantApp.Persistence.Contexts
             string connectionString = configuration.GetConnectionString("DefaultConnection");
 
 
-            DbContextOptionsBuilder<TenantDbContext> optionsBuilder = new();
+            DbContextOptionsBuilder<BaseDbContext> optionsBuilder = new();
             _ = optionsBuilder.UseSqlServer(connectionString);
-            return new TenantDbContext(optionsBuilder.Options);
+            return new BaseDbContext(optionsBuilder.Options);
         }
     }
 }

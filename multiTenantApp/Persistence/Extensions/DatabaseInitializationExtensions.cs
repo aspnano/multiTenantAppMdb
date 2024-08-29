@@ -4,25 +4,25 @@ using multiTenantApp.Persistence.Contexts;
 
 namespace multiTenantApp.Persistence.Extensions
 {
-    public static class MultipleDatabaseExtensions
+    public static class DatabaseInitializationExtensions // renamed from MultipleDatabaseExtentions in video
     {
         public static IServiceCollection AddAndMigrateTenantDatabases(this IServiceCollection services, IConfiguration configuration)
         {
 
-            // Tenant Db Context (reference context) - get a list of tenants
+            // Base Context (central db) - get a list of tenants
             using IServiceScope scopeTenant = services.BuildServiceProvider().CreateScope();
-            TenantDbContext tenantDbContext = scopeTenant.ServiceProvider.GetRequiredService<TenantDbContext>();
+            BaseDbContext baseDbContext = scopeTenant.ServiceProvider.GetRequiredService<BaseDbContext>();
 
-            if (tenantDbContext.Database.GetPendingMigrations().Any())
+            if (baseDbContext.Database.GetPendingMigrations().Any())
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("Applying BaseDb Migrations.");
                 Console.ResetColor();
-                tenantDbContext.Database.Migrate(); // apply migrations on baseDbContext
+                baseDbContext.Database.Migrate(); // apply migrations on baseDbContext
             }
 
 
-            List<Tenant> tenantsInDb = tenantDbContext.Tenants.ToList();
+            List<Tenant> tenantsInDb = baseDbContext.Tenants.ToList();
 
             string defaultConnectionString = configuration.GetConnectionString("DefaultConnection"); // read default connection string from appsettings.json
 
